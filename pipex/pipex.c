@@ -1,71 +1,103 @@
 #include <stdlib.h>
 #include "pipex.h"
 
-int main(int argc, char **argv, char **env)
+char	**splitpath(char **env)
+{
+	char *path;
+	char **splited;
+	int i = 0;
+	while(env[i])
+	{
+		path = ft_strnstr(env[i], "PATH=", 5);
+		if (path)
+		{
+			path = ft_strtrim(path, "PATH=");
+			break;
+		}
+		i++;
+	}
+
+	splited = ft_split(path, ':');
+	free(path);
+	return (splited);
+}
+
+void	splitav(char **av, int nbrcmd, t_cp *cmdp)
+{
+	int i = -1;
+	while(++i < nbrcmd)
+		cmdp[i].cmd = ft_split(av[i + 2], ' ');
+}
+
+int	accs(char *path)
+{
+	if (access(path, F_OK))
+		return 1;
+	if (open(path, O_DIRECTORY) < 0)
+	{
+		if (!(access(path, X_OK)))
+			return (0);
+		else
+			return (2);
+	}
+	return (3);
+}
+char	*joinpath(char **splitedp, t_cp *cmd)
+{
+	int i;
+
+	i = 0;
+	while(s)
+	{
+		
+	}
+	i = 0
+}
+int main(int ac, char **av, char **env)
 {
 
 	int i = 0;
 	char ** splitedp;
-	char *path1;
-	char **cmnd;
-	char **prm;
-	char **tmp;
-	int nbrcmd = argc - 4;
+	int nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	cmdp = malloc(nbrcmd * sizeof(t_cp));
-	// if(argc < 5)
-		// return 0;
-	// printf("ana hna");
-	while(env)
-	{
-		path1 = ft_strnstr(env[i], "PATH=", 5);
-		if (path1)
-		{
-			path1 = ft_strtrim(path1, "PATH=");
-			break;
-		}
-		env++;
-		i++;
-	}
-	splitedp = ft_split(path1, ':');
-		// printf("%s\n", splitedp[1]);
+	cmdp = malloc((nbrcmd) * sizeof(t_cp) );
 
-	free(path1);
-	i = -1;
-	while (splitedp[++i])
-	{
-		printf("%s\n", splitedp[i]);
-		fflush(stdout);
-		
-	}
+	splitedp = splitpath(env);
+	splitav(av, nbrcmd, cmdp);
 
-	i = 0;
+
+	// while(i <= nbrcmd)
+	// {
+	// 	cmdp[i].cmd = ft_split(av[i + 2], ' ');
+	// 	i++;
+	// }
 	int j,f;
-	// printf("ana hna");
-
-	while(i <= nbrcmd)
-	{
-		cmdp[i].cmd = ft_split(argv[i + 2], ' ');
-
-		i++;
-	}
 	j = 0;
 
-	// while(cmdp[j].cmd)
-	// {
-	// 	f=0;
-	// 	while(cmdp[j].cmd[f])			
-	// 	{
-	// 		printf("hada prm  = %s\n", cmdp[j].cmd[f]);
-	// 		fflush(stdout);
-	// 		f++;
-	// 	}
-	// 		printf("cmd %d daz\n", j);
-	// 		fflush(stdout);
+	while(cmdp[j].cmd && j < nbrcmd)
+	{
+			printf("cmd %d daz\n", j+1);
+			fflush(stdout);
+			write(1,"C\n",2);
+		f=0;
+		while( cmdp[j].cmd && cmdp[j].cmd[f]) 			
+		{
+			printf("hada prm  = %s\n", cmdp[j].cmd[f]);
+			fflush(stdout);
+			f++;
+		}
 
-	// 	j++;
-	// }
-
+		j++;
+	}
+				// f =0;
+				// while(cmdp[].cmd[f])			
+				// {
+				// 	printf("hada prm  = %s\n", cmdp[j].cmd[f]);
+				// 	fflush(stdout);
+				// 	f++;
+				// }
+	printf("hi");
+			fflush(stdout);
 	// i = 2;
 	// int j = 0;
 	// int t;

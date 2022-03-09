@@ -9,6 +9,7 @@
 typedef struct s_cp
 {
 	char			**cmd;
+	char			*cmdp;
 }					t_cp;
 
 typedef struct s_path
