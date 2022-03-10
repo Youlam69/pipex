@@ -24,16 +24,21 @@ char	**splitpath(char **env)
 
 void	splitav(char **av, int nbrcmd, t_cp *cmdp)
 {
-	int i = -1;
+	int i;
+	i = -1;
+
 	while(++i < nbrcmd)
 		cmdp[i].cmd = ft_split(av[i + 2], ' ');
 }
 
 int	accs(char *path)
 {
+	int opn;
 	if (access(path, F_OK))
 		return 1;
-	if (open(path, O_DIRECTORY) < 0)
+	opn	= open(path, O_DIRECTORY);
+	//  = open(path, O_DIRECTORY);
+	if (opn < 0)
 	{
 		if (!(access(path, X_OK)))
 			return (0);
@@ -42,35 +47,55 @@ int	accs(char *path)
 	}
 	return (3);
 }
-char	*joinpath(char **splitedp, t_cp *cmd)
+
+void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 {
 	int i;
-
+	int j;
+	char *pathj;
+	char *tmp;
 	i = 0;
-	while(s)
+	j = 0;
+	while(j < nbrcmd && (*cmd)[j].cmd[0])
 	{
-		
+		i = 0;
+		while(splitedp[i])
+		{
+			tmp = ft_strjoin(splitedp[i], "/");
+			pathj = ft_strjoin(tmp, (const char *)((*cmd)[j].cmd[0]));
+			free(tmp);
+			if(accs(pathj) == 0)
+			{
+				(*cmd)[j].cmdp = pathj;
+				break;
+			}
+			free(pathj);
+			i++;
+		}
+		if(!splitedp[i])
+			(*cmd)[j].cmdp = strdup("\0");
+		j++;
 	}
-	i = 0
 }
+
 int main(int ac, char **av, char **env)
 {
-
-	int i = 0;
-	char ** splitedp;
-	int nbrcmd = ac - 3;
+	char	**splitedp;
+	int	nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	cmdp = malloc((nbrcmd) * sizeof(t_cp) );
 
+	if (ac < 3)
+		return 0;
+	if(!env)
+		return 0;
+	cmdp = malloc((nbrcmd) * sizeof(t_cp) );
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
+	joinpath(splitedp, &cmdp, nbrcmd);
 
-
-	// while(i <= nbrcmd)
-	// {
-	// 	cmdp[i].cmd = ft_split(av[i + 2], ' ');
-	// 	i++;
-	// }
+/****************************************************/
+/**********************TO_TEST***********************/
+	printf("hada libghit  = %s\n", cmdp[0].cmd[0]);
 	int j,f;
 	j = 0;
 
@@ -86,18 +111,30 @@ int main(int ac, char **av, char **env)
 			fflush(stdout);
 			f++;
 		}
-
+		printf("hada lien r9m : %d \n", j);
+		printf("hada lien  = %s\n", cmdp[j].cmdp);
+			fflush(stdout);
 		j++;
 	}
-				// f =0;
-				// while(cmdp[].cmd[f])			
-				// {
-				// 	printf("hada prm  = %s\n", cmdp[j].cmd[f]);
-				// 	fflush(stdout);
-				// 	f++;
-				// }
-	printf("hi");
-			fflush(stdout);
+	printf("hada ln2  = %s\n", cmdp[1].cmd[0]);
+
+	while(cmdp[j].cmdp && j < nbrcmd)
+	{
+		printf("cmd %d daz\n", j+1);
+		fflush(stdout);
+		write(1,"O\n",2);			
+		fflush(stdout);
+		j++;
+	}
+		// f =0;
+		// while(cmdp[].cmd[f])			
+		// {
+		// 	printf("hada prm  = %s\n", cmdp[j].cmd[f]);
+		// 	fflush(stdout);
+		// 	f++;
+		// }
+	// printf("hi");
+	// 		fflush(stdout);
 	// i = 2;
 	// int j = 0;
 	// int t;
