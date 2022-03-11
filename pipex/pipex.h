@@ -7,20 +7,22 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "libft.h"
+#include <sys/types.h>
+#include <sys/wait.h>
+
 typedef struct s_cp
 {
 	char			**cmd;
 	char			*cmdp;
 }					t_cp;
 
-typedef struct s_path
+typedef struct s_pipe
 {
-	char 			**path;
-	
 	int				fd[2];
 	int 			pid;
-	struct s_list	*next;
-}					t_path;
+	struct s_pipe	*next;
+}					t_pipe;
+
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);

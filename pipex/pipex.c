@@ -6,7 +6,8 @@ char	**splitpath(char **env)
 	char *path;
 	char **splited;
 	int i = 0;
-	while(env[i])
+
+	while (env[i])
 	{
 		path = ft_strnstr(env[i], "PATH=", 5);
 		if (path)
@@ -16,7 +17,6 @@ char	**splitpath(char **env)
 		}
 		i++;
 	}
-
 	splited = ft_split(path, ':');
 	free(path);
 	return (splited);
@@ -36,9 +36,9 @@ int	accs(char *path)
 	int opn;
 	if (access(path, F_OK))
 		return 1;
-	opn	= open(path, O_DIRECTORY);
-	//  = open(path, O_DIRECTORY);
-	if (opn < 0)
+	// opn	= open(path, O_DIRECTORY);
+	// if (opn < 0)
+	if (open(path, O_DIRECTORY) < 0)
 	{
 		if (!(access(path, X_OK)))
 			return (0);
@@ -77,12 +77,58 @@ void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 		j++;
 	}
 }
+int checkpath(char *path)
+{
+	if(path[0] == "\0")
+		return(-1);
+	return 0;
+}
+void forking(t_cp *cmd , int fdof, int nbrcmd, char **env, char *name)
+{
+	int i;
+	pid_t pid;
+	t_pipe fdp;
 
-int main(int ac, char **av, char **env)
+	pid = -2;
+	nbrcmd;
+	pipe(fdp.fd);
+	if (checkpath(cmd->cmdp) == 0 && i> 0)
+		{
+			pid = fork();
+			if (pid == -1)
+				return;
+		}
+	if (pid == 0)
+	{
+		dup2(0,fdp.fd[0]);
+		dup2(1,fdp.fd[1]);
+		execve(cmd->cmdp, cmd->cmd , **env);
+	}
+	else
+	{
+		wait(NULL);
+		nbrcmd--;
+		if(nbrcmd > 0)
+		{
+			if (pid = -2)
+			{
+				close(fdof);
+				fdof = open(name ,O_RDWR | O_TRUNC , 0777)
+			}
+
+		}
+		else
+
+	}
+}
+
+
+int	main(int ac, char **av, char **env)
 {
 	char	**splitedp;
-	int	nbrcmd = ac - 3;
+	int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
+	int	fdof;
 
 	if (ac < 3)
 		return 0;
@@ -92,9 +138,11 @@ int main(int ac, char **av, char **env)
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
+	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+
 
 /****************************************************/
-/**********************TO_TEST***********************/
+/**********************FOR_TEST**********************/
 	printf("hada libghit  = %s\n", cmdp[0].cmd[0]);
 	int j,f;
 	j = 0;

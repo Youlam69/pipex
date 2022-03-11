@@ -51,10 +51,11 @@ ft_lstmap.c
 BONUS_OBJS = $(BONUS_FCTS:.c=.o)
 NAME = libft.a
 
+all: $(NAME) clean
+
 $(NAME): $(OBJS)
 	@$(AR) $@ $^
 
-all: $(NAME)
 
 bonus: $(BONUS_OBJS)
 	@$(AR) $(NAME) $^
