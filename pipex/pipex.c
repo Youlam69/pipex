@@ -36,8 +36,6 @@ int	accs(char *path)
 	int opn;
 	if (access(path, F_OK))
 		return 1;
-	// opn	= open(path, O_DIRECTORY);
-	// if (opn < 0)
 	if (open(path, O_DIRECTORY) < 0)
 	{
 		if (!(access(path, X_OK)))
@@ -83,16 +81,14 @@ int checkpath(char *path)
 		return(-1);
 	return 0;
 }
-void forking(t_cp *cmd , int fdof, int nbrcmd, char **env, char *name)
+void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i)
 {
-	int i;
 	pid_t pid;
 	t_pipe fdp;
 
 	pid = -2;
-	nbrcmd;
 	pipe(fdp.fd);
-	if (checkpath(cmd->cmdp) == 0 && i> 0)
+	if (checkpath(cmd[i].cmdp) == 0 && nbrcmd > 0)
 		{
 			pid = fork();
 			if (pid == -1)
@@ -100,25 +96,50 @@ void forking(t_cp *cmd , int fdof, int nbrcmd, char **env, char *name)
 		}
 	if (pid == 0)
 	{
-		dup2(0,fdp.fd[0]);
-		dup2(1,fdp.fd[1]);
-		execve(cmd->cmdp, cmd->cmd , **env);
+		if(i == 0)
+		{
+			close(fdp.fd[0]);
+			dup2(0,fdp.fd[1]);
+		}
+		else
+		{
+			close(fdp.fd[0]);
+			dup2(fdof, fdp.fd[1]);
+
+		}
+		// dup2(1,fdp.fd[1]);
+		execve(cmd[i].cmdp, cmd[i].cmd, **env);
 	}
 	else
 	{
 		wait(NULL);
+		i++;
 		nbrcmd--;
+
 		if(nbrcmd > 0)
 		{
 			if (pid = -2)
 			{
 				close(fdof);
-				fdof = open(name ,O_RDWR | O_TRUNC , 0777)
-			}
+				fdof = open(name ,O_RDWR | O_TRUNC , 0777);
 
+			}
+			else if(pid == -1)
+			{
+				return ;
+			}
+				tofork(cmd, fdof, nbrcmd, env, name, i);
 		}
 		else
+		{
+			if (pid = -2)
+			{
+				close(fdof);
+				fdof = open(name ,O_RDWR | O_TRUNC , 0777);
+			}
+			dup2(1, fdof);
 
+		}
 	}
 }
 
@@ -128,8 +149,8 @@ int	main(int ac, char **av, char **env)
 	char	**splitedp;
 	int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	int	fdof;
-
+	int		fdof;
+	int i = 0;
 	if (ac < 3)
 		return 0;
 	if(!env)
@@ -139,6 +160,7 @@ int	main(int ac, char **av, char **env)
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
 	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i)
 
 
 /****************************************************/
