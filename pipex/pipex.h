@@ -19,7 +19,7 @@ typedef struct s_cp
 typedef struct s_pipe
 {
 	int				fd[2];
-	int 			pid;
+	int 			fd2[1];
 	struct s_pipe	*next;
 }					t_pipe;
 
