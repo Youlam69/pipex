@@ -77,7 +77,7 @@ void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 }
 int checkpath(char *path)
 {
-	if(path[0] == "\0")
+	if(path[0] == '\0')
 		return(-1);
 	return 0;
 }
@@ -88,7 +88,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 
 	pid = -2;
 	pipe(fdp.fd);
-	if (checkpath(cmd[i].cmdp) == 0 && nbrcmd > 0)
+	if (checkpath(cmd[i].cmdp) == 0 && nbrcmd > i)
 	{
 		pid = fork();
 		if (pid == -1)
@@ -103,21 +103,20 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		}
 		else
 		{
-			close(fdp.fd[0]);
 			dup2(0, fd2);
 			dup2(1, fdp.fd[1]);
+			close(fdp.fd[0]);
 		}
-		// dup2(1,fdp.fd[1]);
-		execve(cmd[i].cmdp, cmd[i].cmd, **env);
+		execve(cmd[i].cmdp, cmd[i].cmd, env);
 	}
 	else
 	{
 		wait(NULL);
 		i++;
-		nbrcmd--;
-		if(nbrcmd > 0)
+		if(nbrcmd > i)
 		{
-			if (pid = -2)
+
+			if (pid == -2)
 			{
 				close(fdp.fd[1]);
 				fdp.fd2[0] = 0; 
@@ -125,13 +124,13 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			else if(pid == -1)
 				return ;
 	
-			close(fdp.fd[1])
-			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
+			close(fdp.fd[1]);
 			close(fdp.fd[0]);
+			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
 		}
 		else
 		{
-			if (pid = -2)
+			if (pid == -2)
 			{
 					printf("hi makayn walo - 2");
 					// close(fdof);
@@ -160,7 +159,7 @@ int	main(int ac, char **av, char **env)
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
 	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 0)
+	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 0);
 
 
 /****************************************************/
