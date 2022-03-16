@@ -99,23 +99,34 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		if (i == 0)
 		{
 			close(fdp.fd[0]);
-			dup2(1,fdp.fd[1]);
+			dup2(fdp.fd[1], 1);
+			close(fdp.fd[1]);
+
 		}
 		else
-		{
-			dup2(0, fd2);
-			dup2(1, fdp.fd[1]);
 			close(fdp.fd[0]);
+
+		dup2(fd2,0);
+		if(i + 1 == nbrcmd )
+		{
+			dup2(fdp.fd[1], 1);
+			close(fdp.fd[1]);
 		}
+		printf("fd2 %d w fdp.fd[0] %d \n", fd2, fdp.fd[0]);
+		fflush(stdout);
+
+		printf("ha cmnd path %s \n", cmd[i].cmdp);
+		fflush(stdout);
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
 	}
 	else
 	{
+		printf("i =  %d\n", i);
+		fflush(stdout);
 		wait(NULL);
 		i++;
 		if(nbrcmd > i)
 		{
-
 			if (pid == -2)
 			{
 				close(fdp.fd[1]);
@@ -123,21 +134,22 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			}
 			else if(pid == -1)
 				return ;
-	
 			close(fdp.fd[1]);
-			close(fdp.fd[0]);
 			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
+			close(fdp.fd[0]);
 		}
 		else
 		{
 			if (pid == -2)
 			{
-					printf("hi makayn walo - 2");
-					// close(fdof);
-					// fdof = open(name ,O_RDWR | O_TRUNC , 0777);
+				printf("hi makayn walo - 2\n");
+				fflush(stdout);
+				// close(fdof);
+				// fdof = open(name ,O_RDWR | O_TRUNC , 0777);
 			}
-			dup2(1, fdof);
-
+				printf("hi makayn walo asat\n");
+				fflush(stdout);
+			
 		}
 	}
 }
