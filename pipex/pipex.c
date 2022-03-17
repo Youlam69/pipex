@@ -90,6 +90,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 	pipe(fdp.fd);
 	if (checkpath(cmd[i].cmdp) == 0 && nbrcmd > i)
 	{
+
 		pid = fork();
 		if (pid == -1)
 			return ;
@@ -101,36 +102,37 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			close(fdp.fd[0]);
 			dup2(fdp.fd[1], 1);
 			close(fdp.fd[1]);
-
 		}
 		else
 			close(fdp.fd[0]);
 
 		dup2(fd2,0);
-		if(i + 1 == nbrcmd )
+		if(i + 1 < nbrcmd )
 		{
 			dup2(fdp.fd[1], 1);
 			close(fdp.fd[1]);
 		}
-		printf("fd2 %d w fdp.fd[0] %d \n", fd2, fdp.fd[0]);
-		fflush(stdout);
+		else
+			close(fdp.fd[1]);
 
-		printf("ha cmnd path %s \n", cmd[i].cmdp);
-		fflush(stdout);
+		// printf("fd2 %d w fdp.fd[0] %d \n", fd2, fdp.fd[0]);
+		// fflush(stdout);
+
+		// printf("ha cmnd path %s \n", cmd[i].cmdp);
+		// fflush(stdout);
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
 	}
 	else
 	{
-		printf("i =  %d\n", i);
-		fflush(stdout);
 		wait(NULL);
 		i++;
 		if(nbrcmd > i)
 		{
 			if (pid == -2)
 			{
+				printf("hi makayn walo - 2\n");
 				close(fdp.fd[1]);
-				fdp.fd2[0] = 0; 
+				fdp.fd2[0] = 0;
 			}
 			else if(pid == -1)
 				return ;
@@ -140,15 +142,20 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		}
 		else
 		{
+
+			while(1)
+			{
+				
+			}
 			if (pid == -2)
 			{
 				printf("hi makayn walo - 2\n");
-				fflush(stdout);
+				// fflush(stdout);
 				// close(fdof);
 				// fdof = open(name ,O_RDWR | O_TRUNC , 0777);
 			}
 				printf("hi makayn walo asat\n");
-				fflush(stdout);
+				// fflush(stdout);
 			
 		}
 	}
@@ -176,37 +183,37 @@ int	main(int ac, char **av, char **env)
 
 /****************************************************/
 /**********************FOR_TEST**********************/
-	printf("hada libghit  = %s\n", cmdp[0].cmd[0]);
-	int j,f;
-	j = 0;
+	// printf("hada libghit  = %s\n", cmdp[0].cmd[0]);
+	// int j,f;
+	// j = 0;
 
-	while(cmdp[j].cmd && j < nbrcmd)
-	{
-			printf("cmd %d daz\n", j+1);
-			fflush(stdout);
-			write(1,"C\n",2);
-		f=0;
-		while( cmdp[j].cmd && cmdp[j].cmd[f]) 			
-		{
-			printf("hada prm  = %s\n", cmdp[j].cmd[f]);
-			fflush(stdout);
-			f++;
-		}
-		printf("hada lien r9m : %d \n", j);
-		printf("hada lien  = %s\n", cmdp[j].cmdp);
-			fflush(stdout);
-		j++;
-	}
-	printf("hada ln2  = %s\n", cmdp[1].cmd[0]);
+	// while(cmdp[j].cmd && j < nbrcmd)
+	// {
+	// 		printf("cmd %d daz\n", j+1);
+	// 		fflush(stdout);
+	// 		write(1,"C\n",2);
+	// 	f=0;
+	// 	while( cmdp[j].cmd && cmdp[j].cmd[f]) 			
+	// 	{
+	// 		printf("hada prm  = %s\n", cmdp[j].cmd[f]);
+	// 		fflush(stdout);
+	// 		f++;
+	// 	}
+	// 	printf("hada lien r9m : %d \n", j);
+	// 	printf("hada lien  = %s\n", cmdp[j].cmdp);
+	// 		fflush(stdout);
+	// 	j++;
+	// }
+	// printf("hada ln2  = %s\n", cmdp[1].cmd[0]);
 
-	while(cmdp[j].cmdp && j < nbrcmd)
-	{
-		printf("cmd %d daz\n", j+1);
-		fflush(stdout);
-		write(1,"O\n",2);			
-		fflush(stdout);
-		j++;
-	}
+	// while(cmdp[j].cmdp && j < nbrcmd)
+	// {
+	// 	printf("cmd %d daz\n", j+1);
+	// 	fflush(stdout);
+	// 	write(1,"O\n",2);			
+	// 	fflush(stdout);
+	// 	j++;
+	// }
 		// f =0;
 		// while(cmdp[].cmd[f])			
 		// {
