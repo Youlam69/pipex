@@ -14,12 +14,17 @@ int main()
 	int y = 55;
 	printf("fd[0] = %d et fd[1] = %d\n", h, y);
 	int opn;
-	opn =  open("hilol.txt", O_CREAT | O_RDWR | O_TRUNC, 0777);
+	opn =  open("hilol.tsasat", O_RDWR);
+	if( opn < 0)
+	{
+		perror("Error");
+	}
+	if((dup2(555555555, 1) < 0))
+		perror("Error");
 	write(opn, "0123456789",10);
 		close(opn);
 	opn  = open("hilol.txt" ,O_RDWR | O_TRUNC , 0777);
 			write(opn, "abcd",4);
-	
 	wait(NULL);
 	pipi(&pp);
 	printf("fd[0] = %d et fd[1] = %d\n", pp.fd[0], pp.fd[1]);
