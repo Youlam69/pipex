@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/errno.h>
 void pipi(t_pipe *cd)
 {
 	pipe(cd->fd);
@@ -14,13 +15,11 @@ int main()
 	int y = 55;
 	printf("fd[0] = %d et fd[1] = %d\n", h, y);
 	int opn;
-	opn =  open("hilol.tsasat", O_RDWR);
+	opn = open("hilol.tsasat", O_RDWR);
 	if( opn < 0)
-	{
-		perror("Error");
-	}
-	if((dup2(555555555, 1) < 0))
-		perror("Error");
+		perror("wasat");
+	if(dup2(555555555, 1) == -1)
+		printf("sat hadi hia %s\n", strerror(errno));
 	write(opn, "0123456789",10);
 		close(opn);
 	opn  = open("hilol.txt" ,O_RDWR | O_TRUNC , 0777);

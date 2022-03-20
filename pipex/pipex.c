@@ -87,7 +87,11 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 	t_pipe fdp;
 
 	pid = -2;
-	pipe(fdp.fd);
+	if(pipe(fdp.fd) < 0)
+	{
+		perror("Error");
+		return;
+	}
 	if (nbrcmd > i)
 	{
 		pid = fork();
@@ -131,7 +135,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 				return ;
 			close(fdp.fd[1]);
 			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
-			close(fdp.fd[0]);
+			// close(fdp.fd[0]);
 		}
 	}
 }
@@ -143,6 +147,7 @@ int	main(int ac, char **av, char **env)
 	t_cp	*cmdp;
 	int		fdof;
 	int i = 0;
+	int j = 0;
 	if (ac < 3)
 		return 0;
 	if(!env)
@@ -153,7 +158,17 @@ int	main(int ac, char **av, char **env)
 	joinpath(splitedp, &cmdp, nbrcmd);
 	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 0);
-
+	while(i < nbrcmd)
+	{
+		j = 0;
+		while(cmdp[i].cmd[j])
+		{
+			free(cmdp[i].cmd[j]);
+			j++;
+		}
+		free(cmdp[i].cmdp);
+		i++;
+	}
 
 /****************************************************/
 /**********************FOR_TEST**********************/
