@@ -148,11 +148,11 @@ int	main(int ac, char **av, char **env)
 	int		fdof;
 	int i = 0;
 	int j = 0;
-	if (ac < 3)
+	if (ac < 4)
 		return 0;
 	if(!env)
 		return 0;
-	cmdp = malloc((nbrcmd) * sizeof(t_cp) );
+	cmdp = malloc(nbrcmd * sizeof(t_cp) );
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
@@ -166,9 +166,20 @@ int	main(int ac, char **av, char **env)
 			free(cmdp[i].cmd[j]);
 			j++;
 		}
+		free(cmdp[i].cmd);
+
 		free(cmdp[i].cmdp);
 		i++;
 	}
+	free(cmdp);
+	i = 0;
+	while (splitedp[i])
+	{
+		free(splitedp[i]);
+		i++;
+	}
+	free(splitedp);
+	
 
 /****************************************************/
 /**********************FOR_TEST**********************/
