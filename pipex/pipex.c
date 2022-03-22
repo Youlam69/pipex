@@ -113,30 +113,31 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		else if (i + 1 == nbrcmd)
 		{
 			dup2(fd2, 0);
+			close(fd2);
 			dup2(fdof, 1);
 			close(fdof);
-			close(fd2);
 		}
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
 	}
 	else
 	{
-		wait(NULL);
 		i++;
 		if(nbrcmd > i)
 		{
+
+			//to modified cuz i will read from pipe not in put//
 			if (pid == -2)
 			{
-				printf("hi makayn walo - 2\n");
 				close(fdp.fd[1]);
 				fdp.fd2[0] = 0;
 			}
+			/*****************************************************/
 			else if(pid == -1)
 				return ;
 			close(fdp.fd[1]);
 			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
-			// close(fdp.fd[0]);
 		}
+		wait(NULL);
 	}
 }
 
