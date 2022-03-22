@@ -71,20 +71,20 @@ void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 			i++;
 		}
 		if(!splitedp[i])
-			(*cmd)[j].cmdp = strdup("\0");
+			(*cmd)[j].cmdp = strdup((*cmd)[j].cmd[0]);
 		j++;
 	}
 }
-int checkpath(char *path)
-{
-	if(path[0] == '\0')
-		return(-1);
-	return 0;
-}
+// int checkpath(char *path)
+// {
+// 	if(path[0] == ''\0)
+// 		return(-1);
+// 	return 0;
+// }
 void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int fd2)
 {
 	pid_t pid;
-	t_pipe fdp;
+	t_cp fdp;
 
 	pid = -2;
 	if(pipe(fdp.fd) < 0)
@@ -108,12 +108,17 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			dup2(fdp.fd[1], 1);
 			close(fdp.fd[1]);
 			if(i > 0)
+			{
 				dup2(fd2,0);
+				close(fd2);
+			}
 		}
 		else if (i + 1 == nbrcmd)
 		{
+
 			dup2(fd2, 0);
 			close(fd2);
+	
 			dup2(fdof, 1);
 			close(fdof);
 		}
@@ -151,14 +156,17 @@ int	main(int ac, char **av, char **env)
 	int j = 0;
 	if (ac < 4)
 		return 0;
-	if(!env)
+	if(!*env)
 		return 0;
 	cmdp = malloc(nbrcmd * sizeof(t_cp) );
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
 	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 0);
+	
+	// i = open(av[1],O_RDONLY, 0644);
+
+	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 555423);
 	while(i < nbrcmd)
 	{
 		j = 0;

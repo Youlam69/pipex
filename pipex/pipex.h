@@ -14,12 +14,14 @@ typedef struct s_cp
 {
 	char			**cmd;
 	char			*cmdp;
+	char			**splitedp;
+	int				files[2];
+	int				fd[2];
+	int 			fd2[1];
 }					t_cp;
 
 typedef struct s_pipe
 {
-	int				fd[2];
-	int 			fd2[1];
 	struct s_pipe	*next;
 }					t_pipe;
 

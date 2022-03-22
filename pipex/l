@@ -1,0 +1,31 @@
+total 264
+-rw-r--r--  1 ylamraou  candidate    654 Mar 22 18:01 Makefile
+-rwxr-xr-x  1 ylamraou  candidate  13768 Mar 22 18:01 a.out
+-rw-r--r--  1 ylamraou  candidate    973 Mar 22 15:01 ft_bzero.c
+-rw-r--r--  1 ylamraou  candidate   1061 Mar 22 15:01 ft_calloc.c
+-rw-r--r--  1 ylamraou  candidate   1073 Mar 22 15:01 ft_memset.c
+-rw-r--r--  1 ylamraou  candidate   1923 Mar 22 15:01 ft_split.c
+-rw-r--r--  1 ylamraou  candidate   1092 Mar 22 15:01 ft_strchr.c
+-rw-r--r--  1 ylamraou  candidate   1130 Mar 22 15:01 ft_strdup.c
+-rw-r--r--  1 ylamraou  candidate   1265 Mar 22 15:01 ft_strjoin.c
+-rw-r--r--  1 ylamraou  candidate   1248 Mar 22 15:01 ft_strlcat.c
+-rw-r--r--  1 ylamraou  candidate   1006 Mar 22 15:01 ft_strlen.c
+-rw-r--r--  1 ylamraou  candidate   1318 Mar 22 15:01 ft_strnstr.c
+-rw-r--r--  1 ylamraou  candidate   1232 Mar 22 15:01 ft_strtrim.c
+-rw-r--r--  1 ylamraou  candidate   1308 Mar 22 15:01 ft_substr.c
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 15:01 hi mom
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 15:01 hilol
+-rwxr-xr-x  1 ylamraou  candidate      0 Mar 22 15:01 hilol.txt
+-rw-r--r--  1 ylamraou  candidate     34 Mar 22 15:01 infile
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 18:02 l
+-rw-r--r--  1 ylamraou  candidate  31864 Mar 22 18:00 libft.a
+-rw-r--r--  1 ylamraou  candidate   2990 Mar 22 15:01 libft.h
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 16:08 lkds
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 15:58 lol
+-rw-r--r--  1 ylamraou  candidate   1453 Mar 22 15:01 main.c
+-rw-r--r--  1 ylamraou  candidate   3880 Mar 22 15:07 norme.c
+-rw-r--r--  1 ylamraou  candidate   3445 Mar 22 15:01 outfile
+-rw-r--r--  1 ylamraou  candidate   4391 Mar 22 17:50 pipex.c
+-rw-r--r--  1 ylamraou  candidate   1144 Mar 22 17:50 pipex.h
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 15:36 test
+-rw-r--r--  1 ylamraou  candidate      0 Mar 22 16:08 whoami
