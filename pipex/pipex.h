@@ -18,6 +18,8 @@ typedef struct s_cp
 	int				files[2];
 	int				fd[2];
 	int 			fd2[1];
+	char 			*pathj;
+	char 			*tmp;
 }					t_cp;
 
 typedef struct s_pipe

@@ -48,31 +48,25 @@ int	accs(char *path)
 
 void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 {
-	int i;
-	int j;
-	char *pathj;
-	char *tmp;
-	i = 0;
-	j = 0;
-	while(j < nbrcmd && (*cmd)[j].cmd[0])
+	int		i;
+	int		j;
+	char	*tmp;
+
+	j = -1;
+	while (++j < nbrcmd && (*cmd)[j].cmd[0])
 	{
-		i = 0;
-		while(splitedp[i])
+		i = -1;
+		while (splitedp[++i])
 		{
 			tmp = ft_strjoin(splitedp[i], "/");
-			pathj = ft_strjoin(tmp, (const char *)((*cmd)[j].cmd[0]));
+			(*cmd)[j].cmdp = ft_strjoin(tmp, (const char *)((*cmd)[j].cmd[0]));
 			free(tmp);
-			if(accs(pathj) == 0)
-			{
-				(*cmd)[j].cmdp = pathj;
+			if (accs((*cmd)[j].cmdp) == 0)
 				break;
-			}
-			free(pathj);
-			i++;
+			free((*cmd)[j].cmdp);
 		}
-		if(!splitedp[i])
+		if (!splitedp[i])
 			(*cmd)[j].cmdp = strdup((*cmd)[j].cmd[0]);
-		j++;
 	}
 }
 // int checkpath(char *path)
@@ -129,7 +123,6 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		i++;
 		if(nbrcmd > i)
 		{
-
 			//to modified cuz i will read from pipe not in put//
 			if (pid == -2)
 			{
@@ -188,7 +181,9 @@ int	main(int ac, char **av, char **env)
 		i++;
 	}
 	free(splitedp);
+	return 0;
 	
+}
 
 /****************************************************/
 /**********************FOR_TEST**********************/
@@ -265,5 +260,3 @@ int	main(int ac, char **av, char **env)
 	// 	pipex()
 	// }
 	// dup( 0;fd)
-	
-}
