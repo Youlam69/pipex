@@ -9,13 +9,14 @@
 # include "libft.h"
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/errno.h>
 
 typedef struct s_cp
 {
 	char			**cmd;
 	char			*cmdp;
 	char			**splitedp;
-	int				files[2];
+	// int				files[2];
 	int				fd[2];
 	int 			fd2[1];
 	char 			*pathj;

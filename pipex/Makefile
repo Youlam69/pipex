@@ -26,6 +26,7 @@ ft_lstlast.c \
 ft_lstsize.c \
 ft_lstmap.c
 
+
 BONUS_OBJS = $(BONUS_FCTS:.c=.o)
 NAME = libft.a
 

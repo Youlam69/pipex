@@ -84,7 +84,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 	if(pipe(fdp.fd) < 0)
 	{
 		perror("Error");
-		return;
+		return ;
 	}
 	if (nbrcmd > i)
 	{
@@ -109,7 +109,6 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 		}
 		else if (i + 1 == nbrcmd)
 		{
-
 			dup2(fd2, 0);
 			close(fd2);
 	
@@ -117,6 +116,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			close(fdof);
 		}
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
+		// if ()
 	}
 	else
 	{
@@ -157,7 +157,7 @@ int	main(int ac, char **av, char **env)
 	joinpath(splitedp, &cmdp, nbrcmd);
 	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	
-	// i = open(av[1],O_RDONLY, 0644);
+ 	open(av[1],O_RDONLY, 0644);
 
 	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 555423);
 	while(i < nbrcmd)
