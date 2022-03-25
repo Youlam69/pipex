@@ -9,10 +9,9 @@
 /*   Updated: 2022/02/15 20:49:27 by ylamraou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-# include <math.h>
-# include <stdio.h>
-# include <stdarg.h>
-# include <unistd.h>
+
+#include <stdarg.h>
+#include <unistd.h>
 
 void	ft_putchar_fd(char c, int *ret)
 {
@@ -34,7 +33,6 @@ void	ft_putstr_fd(char *s, int *ret)
 
 void	chek(const char *str, va_list arg, int *ret)
 {
-
 	if (*str == 's')
 		ft_putstr_fd(va_arg(arg, char *), ret);
 	else if (*str == '%')

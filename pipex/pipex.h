@@ -27,7 +27,6 @@ typedef struct s_pipe
 {
 	struct s_pipe	*next;
 }					t_pipe;
-
 // char	*ft_strjoin(char const *s1, char const *s2);
 // char	*ft_strtrim(char const *s1, char const *set);
 // char	*ft_strnstr(const char *haystack, const char *needle, size_t len);

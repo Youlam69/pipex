@@ -6,7 +6,7 @@
 /*   By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:30:57 by ylamraou          #+#    #+#             */
-/*   Updated: 2022/03/19 18:31:44 by ylamraou         ###   ########.fr       */
+/*   Updated: 2022/03/24 23:04:51 by ylamraou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 
+int		ft_printf(const char *str, ...);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	*ft_memset(void *b, int c, size_t len);
 void	ft_bzero(void *s, size_t n);

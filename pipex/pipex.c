@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include "pipex.h"
+int *h;
+	int m = 0;
+	h = &m;
 
 char	**splitpath(char **env)
 {
@@ -115,12 +118,17 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			dup2(fdof, 1);
 			close(fdof);
 		}
-		execve(cmd[i].cmdp, cmd[i].cmd, env);
-		// if ()
+		m = execve(cmd[i].cmdp, cmd[i].cmd, env);
+		if(m < 0)
+				write(1, "12343", 5);
+
+		exit(1);
 	}
 	else
 	{
 		i++;
+		if(*h == 0)
+				write(1, "waaa3", 5);
 		if(nbrcmd > i)
 		{
 			//to modified cuz i will read from pipe not in put//
