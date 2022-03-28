@@ -22,6 +22,7 @@ typedef struct s_cp
 	int 			fd2[1];
 	char 			*pathj;
 	char 			*tmp;
+	int				nbrcmd[1];
 }					t_cp;
 
 typedef struct s_pipe
