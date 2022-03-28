@@ -15,8 +15,9 @@ typedef struct s_cp
 {
 	char			**cmd;
 	char			*cmdp;
-	char			**splitedp;
-	// int				files[2];
+	char			**splitedp;\
+	// int 			fdof[];
+	int				files[2];
 	int				fd[2];
 	int 			fd2[1];
 	char 			*pathj;

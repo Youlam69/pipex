@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include "pipex.h"
-int *h;
-	int m = 0;
-	h = &m;
+// int *h;
+// int m = 0;
+// h = &m;
 
 char	**splitpath(char **env)
 {
@@ -115,20 +115,20 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			dup2(fd2, 0);
 			close(fd2);
 	
-			dup2(fdof, 1);
-			close(fdof);
+			dup2(cmd[0].files[1], 1);
+			close(cmd[0].files[1]);
 		}
-		m = execve(cmd[i].cmdp, cmd[i].cmd, env);
-		if(m < 0)
-				write(1, "12343", 5);
+		execve(cmd[i].cmdp, cmd[i].cmd, env);
+		// if(m < 0)
+		// 		write(1, "12343", 5);
 
 		exit(1);
 	}
 	else
 	{
 		i++;
-		if(*h == 0)
-				write(1, "waaa3", 5);
+		// if(*h == 0)
+				// write(1, "waaa3", 5);
 		if(nbrcmd > i)
 		{
 			//to modified cuz i will read from pipe not in put//
@@ -163,11 +163,11 @@ int	main(int ac, char **av, char **env)
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
-	fdof = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+ 	cmdp[0].files[0] = open(av[1],O_RDONLY, 0644);
+	cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	
- 	open(av[1],O_RDONLY, 0644);
 
-	tofork(cmdp, fdof, nbrcmd, env, av[nbrcmd + 2], i, 555423);
+	tofork(cmdp, cmdp[0].files[1], nbrcmd, env, av[nbrcmd + 2], i, 555423);
 	while(i < nbrcmd)
 	{
 		j = 0;
@@ -190,7 +190,6 @@ int	main(int ac, char **av, char **env)
 	}
 	free(splitedp);
 	return 0;
-	
 }
 
 /****************************************************/
