@@ -1,8 +1,5 @@
 #include <stdlib.h>
 #include "pipex.h"
-// int *h;
-// int m = 0;
-// h = &m;
 
 char	**splitpath(char **env)
 {
@@ -78,7 +75,7 @@ void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 // 		return(-1);
 // 	return 0;
 // }
-void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int fd2)
+void tofork(t_cp *cmd, int nbrcmd, char **env, char *name, int i, int fd2)
 {
 	pid_t pid;
 	t_cp fdp;
@@ -141,7 +138,7 @@ void tofork(t_cp *cmd, int fdof, int nbrcmd, char **env, char *name, int i, int 
 			else if(pid == -1)
 				return ;
 			close(fdp.fd[1]);
-			tofork(cmd, fdof, nbrcmd, env, name, i, fdp.fd[0]);
+			tofork(cmd, nbrcmd, env, name, i, fdp.fd[0]);
 		}
 		wait(NULL);
 	}
@@ -152,7 +149,6 @@ int	main(int ac, char **av, char **env)
 	char	**splitedp;
 	int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	int		fdof;
 	int i = 0;
 	int j = 0;
 	if (ac < 4)
@@ -167,7 +163,7 @@ int	main(int ac, char **av, char **env)
 	cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	
 
-	tofork(cmdp, cmdp[0].files[1], nbrcmd, env, av[nbrcmd + 2], i, 555423);
+	tofork(cmdp, nbrcmd, env, av[nbrcmd + 2], i, 555423);
 	while(i < nbrcmd)
 	{
 		j = 0;

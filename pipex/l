@@ -1,24 +1,16 @@
-total 264
--rw-r--r--   1 ylamraou  candidate    424 Mar 24 23:25 Makefile
--rwxr-xr-x   1 ylamraou  candidate  13808 Mar 28 19:00 a.out
--rw-r--r--   1 ylamraou  candidate    973 Mar 22 15:01 ft_bzero.c
--rw-r--r--   1 ylamraou  candidate   1061 Mar 22 15:01 ft_calloc.c
--rw-r--r--   1 ylamraou  candidate   1073 Mar 22 15:01 ft_memset.c
--rw-r--r--   1 ylamraou  candidate   1662 Mar 24 23:03 ft_printf.c
--rw-r--r--   1 ylamraou  candidate   1923 Mar 22 15:01 ft_split.c
--rw-r--r--   1 ylamraou  candidate   1092 Mar 22 15:01 ft_strchr.c
--rw-r--r--   1 ylamraou  candidate   1130 Mar 22 15:01 ft_strdup.c
--rw-r--r--   1 ylamraou  candidate   1265 Mar 22 15:01 ft_strjoin.c
--rw-r--r--   1 ylamraou  candidate   1248 Mar 22 15:01 ft_strlcat.c
--rw-r--r--   1 ylamraou  candidate   1006 Mar 22 15:01 ft_strlen.c
--rw-r--r--   1 ylamraou  candidate   1318 Mar 22 15:01 ft_strnstr.c
--rw-r--r--   1 ylamraou  candidate   1232 Mar 22 15:01 ft_strtrim.c
--rw-r--r--   1 ylamraou  candidate   1308 Mar 22 15:01 ft_substr.c
--rw-r--r--   1 ylamraou  candidate      0 Mar 28 19:00 l
--rw-r--r--   1 ylamraou  candidate  34144 Mar 24 23:11 libft.a
--rw-r--r--   1 ylamraou  candidate   3028 Mar 24 23:04 libft.h
--rw-r--r--   1 ylamraou  candidate   1453 Mar 22 15:01 main.c
--rw-r--r--   1 ylamraou  candidate   3880 Mar 23 16:21 norme.c
--rw-r--r--   1 ylamraou  candidate   4559 Mar 28 19:00 pipex.c
--rw-r--r--   1 ylamraou  candidate   1218 Mar 28 18:52 pipex.h
-drwxr-xr-x  14 ylamraou  candidate    476 Mar 24 23:03 printf
+ft_bzero.c
+ft_calloc.c
+ft_memset.c
+ft_printf.c
+ft_split.c
+ft_strchr.c
+ft_strdup.c
+ft_strjoin.c
+ft_strlcat.c
+ft_strlen.c
+ft_strnstr.c
+ft_strtrim.c
+ft_substr.c
+main.c
+norme.c
+pipex.c
