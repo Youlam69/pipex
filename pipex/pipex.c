@@ -155,6 +155,7 @@ int	main(int ac, char **av, char **env)
 		return 0;
 	if(!*env)
 		return 0;
+
 	cmdp = malloc(nbrcmd * sizeof(t_cp) );
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
