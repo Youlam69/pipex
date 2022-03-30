@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "pipex.h"
 
 char	**splitpath(char **env)
@@ -31,7 +30,7 @@ void	splitav(char **av, int nbrcmd, t_cp *cmdp)
 		cmdp[i].cmd = ft_split(av[i + 2], ' ');
 }
 
-int	accs(char *path)
+int		accs(char *path)
 {
 	int opn;
 	if (access(path, F_OK))
@@ -75,7 +74,8 @@ void	joinpath(char **splitedp, t_cp **cmd, int nbrcmd)
 // 		return(-1);
 // 	return 0;
 // }
-void tofork(t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
+
+void	tofork (t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
 {
 	pid_t pid;
 	t_cp fdp;
@@ -99,10 +99,18 @@ void tofork(t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
 		close(fdp.fd[0]);
 		if(i + 1 < nbrcmd )
 		{
-			dup2(fdp.fd[1], 1);
-			close(fdp.fd[1]);
+			if (i == 0)
+			{
+				if(cmd->files[0] < 0)
+					exit(1);
+				dup2(fdp.fd[1], 1);
+				close(fdp.fd[1]);
+				dup2(cmd->files[0], 0);
+
+			}
 			if(i > 0)
 			{
+				dup2(fdp.fd[1], 1);
 				dup2(fd2,0);
 				close(fd2);
 			}
@@ -111,18 +119,20 @@ void tofork(t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
 		{
 			dup2(fd2, 0);
 			close(fd2);
-	
 			dup2(cmd[0].files[1], 1);
 			close(cmd[0].files[1]);
 		}
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
-		// if(m < 0)
-		// 		write(1, "12343", 5);
-
+		// if(execve(cmd[i].cmdp, cmd[i].cmd, env) < 0)
+		// {
+		// 	// perror("wesh akhalid dwach");
+		// // 		write(1, "12343", 5);
 		exit(1);
 	}
 	else
 	{
+		if((accs(cmd[i].cmdp)))
+			ft_printf("command not found: %s\n", cmd[i].cmd[0]);
 		i++;
 		// if(*h == 0)
 				// write(1, "waaa3", 5);
@@ -155,12 +165,13 @@ int	main(int ac, char **av, char **env)
 		return 0;
 	if(!*env)
 		return 0;
-
 	cmdp = malloc(nbrcmd * sizeof(t_cp) );
 	splitedp = splitpath(env);
 	splitav(av, nbrcmd, cmdp);
 	joinpath(splitedp, &cmdp, nbrcmd);
- 	cmdp[0].files[0] = open(av[1],O_RDONLY, 0644);
+	cmdp[0].files[0] = open(av[1],O_RDONLY, 0644);
+	if (cmdp[0].files[0] < 0)
+		ft_printf("%s %s\n", strerror(errno), av[1]);
 	cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	
 
