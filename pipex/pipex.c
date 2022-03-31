@@ -123,10 +123,6 @@ void	tofork (t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
 			close(cmd[0].files[1]);
 		}
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
-		// if(execve(cmd[i].cmdp, cmd[i].cmd, env) < 0)
-		// {
-		// 	// perror("wesh akhalid dwach");
-		// // 		write(1, "12343", 5);
 		exit(1);
 	}
 	else
