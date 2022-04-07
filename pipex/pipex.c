@@ -149,30 +149,42 @@ void	tofork (t_cp *cmd, int nbrcmd, char **env, int i, int fd2)
 		wait(NULL);
 	}
 }
-
+// int 
 int	main(int ac, char **av, char **env)
 {
 	char	**splitedp;
-	int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	int i = 0;
-	int j = 0;
+	int 	i = 0;
+
 	if (ac < 4)
 		return 0;
+	if (!ft_strnstr("here_doc", av[1], 8))
+	{
+		cmdp = malloc(ac - 4 * sizeof(t_cp) );
+		cmdp->nbrcmd[0] = ac - 4;
+		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
+	}
+	else
+	{
+	printf("hi lool");
+	fflush(stdout);
+		cmdp = malloc(ac - 3 * sizeof(t_cp) );
+		cmdp->nbrcmd[0] = ac - 3;
+		cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	}
 	if(!*env)
 		return 0;
-	cmdp = malloc(nbrcmd * sizeof(t_cp) );
+	if(av[1])
 	splitedp = splitpath(env);
-	splitav(av, nbrcmd, cmdp);
-	joinpath(splitedp, &cmdp, nbrcmd);
+	splitav(av, cmdp->nbrcmd[0], cmdp);
+	joinpath(splitedp, &cmdp, cmdp->nbrcmd[0]);
 	cmdp[0].files[0] = open(av[1],O_RDONLY, 0644);
 	if (cmdp[0].files[0] < 0)
 		ft_printf("%s %s\n", strerror(errno), av[1]);
-	cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	
+	tofork(cmdp, cmdp->nbrcmd[0], env, i, 555423);
 
-	tofork(cmdp, nbrcmd, env, i, 555423);
-	while(i < nbrcmd)
+	int j = 0;
+	while(i < cmdp->nbrcmd[0])
 	{
 		j = 0;
 		while(cmdp[i].cmd[j])
