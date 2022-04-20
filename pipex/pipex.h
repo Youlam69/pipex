@@ -15,14 +15,15 @@ typedef struct s_cp
 {
 	char			**cmd;
 	char			*cmdp;
-	char			**splitedp;\
+	char			**splitedp;
 	// int 			fdof[];
 	int				files[2];
 	int				fd[2];
-	int 			fd2[1];
+	int 			fd2;
 	char 			*pathj;
 	char 			*tmp;
-	int				nbrcmd[1];
+	int				nbrcmd;
+	int				her_exist;
 }					t_cp;
 
 typedef struct s_pipe
