@@ -69,7 +69,7 @@ void	joinpath(t_cp *cmd, int nbrcmd)
 	}
 }
 
-void	tofork (t_cp *cmd, char **env, int i, int fd2) // int **tab
+void	tofork (t_cp *cmd, char **env, int i, int fd2) 
 {
 	pid_t pid;
 	int fdpp[2];
@@ -82,51 +82,54 @@ void	tofork (t_cp *cmd, char **env, int i, int fd2) // int **tab
 	}
 	if (cmd->nbrcmd > i) //nbrcmnd
 	{
+		
 		pid = fork();
+		// printf("l9lawi m3aslin\n");
+
 		if (pid == -1)
 			return ;
 	}
 	else
+	{
+
+		// printf("l9lawi m3asli4444n\n");
+
 		return ;
+	}
 	if (pid == 0)
 	{
-		close(fdpp[0]);
-		if(i + 1 < cmd->nbrcmd ) // normalement khas maydkkhalch la kan ghir cmnd 1
-		{
-			if (i == 0)
-			{
-				// if (cmd->files[0] < 0)
-				// {
-	 // printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh KKKKKKKKK%d\n", cmd->files[0]);
-				// 	exit(1);
-				// }
-	printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
-					printf("\nhada dup %i\n",dup2(cmd->files[0], 0));
-			fflush(stdout);
-				dup2(fdpp[1], 1);
-				close(fdpp[1]);
- 
-			}
-			else if (i > 0)
-			{
-	printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ELSEIF f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
+		// close(fdpp[0]);
 
-				dup2(fdpp[1], 1);
-				dup2(fd2,0);
-				close(fd2);
+		if (i == 0 && cmd->nbrcmd > 0)
+		{
+			dup2(cmd->files[0], 0);
+			
+			if (cmd->nbrcmd == 1)
+			{
+				dup2(cmd->files[1], 1);
+				close(cmd->files[1]);
 			}
+			else
+			{
+			dup2(fdpp[1], 1);
+			close(fdpp[1]);
+			}
+		}
+		else if(i + 1 < cmd->nbrcmd ) // normalement khas maydkkhalch la kan ghir cmnd 1
+		{
+			dup2(fd2, 0);
+			dup2(fdpp[1], 1);
+			close(fd2);
+			close(fdpp[1]);
 		}
 		else if (i + 1 == cmd->nbrcmd) // normalement khas maydkkhalch la kan ghir cmnd 1 oui effectivement a3chiry
 		{
-	printf("HHHHHH f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
-
 			dup2(fd2, 0);
-			close(fd2);
+
 			dup2(cmd[0].files[1], 1);
 			close(cmd[0].files[1]);
 		}
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
-		// printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh %d\n", cmd->files[0]);
 		exit(1);
 	}
 	else
@@ -201,16 +204,16 @@ int	main(int ac, char **av, char **env)
 
 	joinpath(cmdp, cmdp->nbrcmd);
 	cmdp[0].files[0] = open(av[1], O_RDONLY, 0644);
-		// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
 	if (cmdp[0].files[0] < 0)
 	{
+		// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
 		printf("%s %s WWWW %d\n", strerror(errno), av[1], cmdp[0].files[0]);
 		fflush(stdout);
 	}
 	// cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 
 
-	tofork(cmdp, env, 0, 555423);
+	tofork(cmdp, env, 0, 0);
 	// while(i < cmdp->nbrcmd)
 	// {
 	// 	j = 0;
