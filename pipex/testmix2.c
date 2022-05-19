@@ -71,10 +71,10 @@ void	joinpath(t_cp *cmd, int nbrcmd)
 void	tofork (t_cp *cmd, char **env, int i, int fd2)
 {
 	pid_t pid;
-	t_cp fdp;
+	int fdp[2];
 
 	pid = -2;
-	if(pipe(fdp.fd) < 0)
+	if(pipe(fdp) < 0)
 	{
 		perror("Error");
 		return ;
@@ -89,21 +89,21 @@ void	tofork (t_cp *cmd, char **env, int i, int fd2)
 		return ;
 	if (pid == 0)
 	{
-		close(fdp.fd[0]);
+		close(fdp[0]);
 		if(i + 1 < cmd->nbrcmd )
 		{
 			if (i == 0)
 			{
 				if(cmd->files[0] < 0)
 					exit(1);
-				dup2(fdp.fd[1], 1);
-				close(fdp.fd[1]);
+				dup2(fdp[1], 1);
+				close(fdp[1]);
 				dup2(cmd->files[0], 0);
 
 			}
 			if(i > 0)
 			{
-				dup2(fdp.fd[1], 1);
+				dup2(fdp[1], 1);
 				dup2(fd2,0);
 				close(fd2);
 			}
@@ -120,50 +120,65 @@ void	tofork (t_cp *cmd, char **env, int i, int fd2)
 	}
 	else
 	{
-		if((accs(cmd[i].cmdp)))
+		if(accs(cmd[i].cmdp))
 			ft_printf("command not found: %s\n", cmd[i].cmd[0]);
 		i++;
-		// if(*h == 0)
-				// write(1, "waaa3", 5);
 		if(cmd->nbrcmd > i)
 		{
 			//to modified cuz i will read from pipe not in put//
 			if (pid == -2)
 			{
-				close(fdp.fd[1]);
-				// fdp.fd2[0] = 0;
+				close(fdp[1]);
+				// fdp2[0] = 0;
 			}
 			/*****************************************************/
 			else if(pid == -1)
 				return ;
-			close(fdp.fd[1]);
-			tofork(cmd, env, i, fdp.fd[0]);
+			close(fdp[1]);
+			tofork(cmd, env, i, fdp[0]);
 		}
 		wait(NULL);
 	}
 }
 
 // pipex here_doc LIMITER cmd cmd1 file
+void	checkfile(t_cp *cmdp, char **av)
+{
+	cmdp->files[0] = open(av[1], O_RDONLY, 0644);
+	if (cmdp->files[0] < 0)
+	{
+		// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
+		ft_printf("%s: %s\n", strerror(errno), av[1]);
+		printf("%s: %s |WWWW %d |\n", strerror(errno), av[1], cmdp->files[0]);
+		// if (cmdp->nbrcmd == 1)
+		// 	return (0);
+	}
+}
 t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 {
-	if (!strcmp("here_doc", av[1]))
+	if (!strcmp("here_doc", av[1])) //khzsni nbadal L ft_strcmp
 	{
 		cmdp = malloc((ac - 4) * sizeof(t_cp) );
 		cmdp->nbrcmd = ac - 4;
+		
 		cmdp->her_exist = 1;
+		// splitav(av, cmdp);
 		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
-		splitav(av, cmdp);
 	}
 	else
 	{
 		cmdp = malloc((ac - 3) * sizeof(t_cp) );
 		cmdp->nbrcmd = ac - 3;
+		checkfile(cmdp, av);
 		cmdp->her_exist = 0;
-		cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-		splitav(av, cmdp);
+		// printf("hada raqm li khda infile : %d", cmdp->files[0]);
+		// fflush(stdout);
+		// splitav(av, cmdp);
+		if(cmdp->nbrcmd > 1)
+			cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	}
+	splitav(av, cmdp);
 	cmdp->splitedp = splitpath(env);
-
 	return(cmdp);
 }
 
@@ -178,19 +193,11 @@ int	main(int ac, char **av, char **env)
 		return 0;
 	if(!*env)
 		return 0;
-	cmdp = checkheredoc(cmdp, ac, av, env);	//malloc(nbrcmd * sizeof(t_cp) );
 
-	// splitav(av, nbrcmd, cmdp);
-	// splitedp = splitpath(env);
-
+	cmdp = checkheredoc(cmdp, ac, av, env);
+	if(cmdp->nbrcmd < 2)
+		return 0;
 	joinpath(cmdp, cmdp->nbrcmd);
-	cmdp[0].files[0] = open(av[1], O_RDONLY, 0644);
-	if (cmdp[0].files[0] < 0)
-	{
-		// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
-		printf("%s %s WWWW %d\n", strerror(errno), av[1], cmdp[0].files[0]);
-		fflush(stdout);
-	}
 	// cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 
 
