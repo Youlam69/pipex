@@ -99,7 +99,6 @@ void	tofork (t_cp *cmd, char **env, int i, int fd2)
 				dup2(fdp[1], 1);
 				close(fdp[1]);
 				dup2(cmd->files[0], 0);
-
 			}
 			if(i > 0)
 			{
@@ -154,13 +153,36 @@ void	checkfile(t_cp *cmdp, char **av)
 		// 	return (0);
 	}
 }
+
+char	*joinheredoc(char **av)
+{
+	int		i;
+	char	*hd_content;
+	char	*limter;
+
+	limter = NULL;
+	hd_content = NULL;
+	while (!strcmp(av[2], limiter))
+	{
+		ft_strjoin(hd_content, limter);
+		limter = get_next_line(0)
+	}
+
+	
+	hd_content = get
+	while (hd_content != delimiter)
+	{
+		//join (hd_content,'\n');
+	}
+}
+
 t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 {
 	if (!strcmp("here_doc", av[1])) //khzsni nbadal L ft_strcmp
 	{
 		cmdp = malloc((ac - 4) * sizeof(t_cp) );
 		cmdp->nbrcmd = ac - 4;
-		
+
 		cmdp->her_exist = 1;
 		// splitav(av, cmdp);
 		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
