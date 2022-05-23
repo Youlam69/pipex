@@ -156,24 +156,21 @@ void	checkfile(t_cp *cmdp, char **av)
 
 char	*joinheredoc(char **av)
 {
-	int		i;
 	char	*hd_content;
-	char	*limter;
+	char	*limiter;
 
-	limter = NULL;
 	hd_content = NULL;
-	while (!strcmp(av[2], limiter))
+	while (1)
 	{
-		ft_strjoin(hd_content, limter);
-		limter = get_next_line(0)
+		limiter = get_next_line(0);
+		if(ft_strcmp(av[1], limiter) != -10) 
+			hd_content = ft_strjoin(hd_content, limiter);
+		else
+			break;
+		free(limiter);
 	}
-
-	
-	hd_content = get
-	while (hd_content != delimiter)
-	{
-		//join (hd_content,'\n');
-	}
+	free(limiter);
+	return (hd_content);
 }
 
 t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)

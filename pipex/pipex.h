@@ -7,10 +7,10 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "libft.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/errno.h>
-#include "./GNxtL/get_next_line.h"
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/errno.h>
+# include "get_next_line.h"
 
 typedef struct s_cp
 {
