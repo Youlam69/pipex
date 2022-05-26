@@ -10,7 +10,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
-# include "get_next_line.h"
+# include "./GNxtL/get_next_line.h"
 
 typedef struct s_cp
 {
