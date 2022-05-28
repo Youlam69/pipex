@@ -14,7 +14,8 @@ ft_strnstr.c \
 ft_strtrim.c \
 ft_printf.c \
 ft_substr.c \
-ft_strjoin.c
+ft_strjoin.c \
+testmix2.c
 # /* ft_strjoin.c \ */
 
 
@@ -26,6 +27,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@$(AR) $@ $^ ./GNxtL/get_next_line.h libft.h
+	@$(CC) $(CFLAGS) libft.a -o pipex
 
 clean:
 	@rm -f $(OBJS)

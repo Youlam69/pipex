@@ -32,7 +32,6 @@ void	splitav(char **av, t_cp *cmdp)
 
 int		accs(char *path)
 {
-	int opn;
 	if (access(path, F_OK))
 		return 1;
 	if (open(path, O_DIRECTORY) < 0)
@@ -158,25 +157,24 @@ char	*joinheredoc(char **av)
 {
 	char	*hd_content;
 	char	*limiter;
+	char	*tmp;
 
 	hd_content = NULL;
 	while (1)
 	{
-		// printf("|hada hd_cntnt|%s|\n", hd_content);
-		// fflush(stdout);
+		ft_printf("> ");
 		limiter = get_next_line(0);
 		if(ft_strcmp(av[2], limiter) != -10)
-{
-
-				printf("|hada hd_cntnt waaast|%s|\n", hd_content);
-		fflush(stdout);
+		{
+			tmp = hd_content;
 			hd_content = ft_strjoin(hd_content, limiter);
-							printf("|hada hd_cntnt waaast|%s|\n", hd_content);
-		fflush(stdout);
-}
+			if (tmp)
+				free(tmp);
+		}
 		else
 			break;
-		free(limiter);
+		if (limiter)
+			free(limiter);
 	}
 	free(limiter);
 	return (hd_content);
@@ -186,57 +184,39 @@ void	checkfile(t_cp *cmdp, char **av)
 {
 	int		pp[2];
 	char	*hd_content;
-	char	*txt;
-
 	if(cmdp->her_exist == 0)
 	{
 		cmdp->files[0] = open(av[1], O_RDONLY, 0644);
-	
 		if (cmdp->files[0] < 0)
 		{
 			// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
 			ft_printf("%s: %s\n", strerror(errno), av[1]);
-			// printf("%s: %s |WWWW %d |\n", strerror(errno), av[1], cmdp->files[0]);
-			// if (cmdp->nbrcmd == 1)
-			// 	return (0);
+			if (cmdp->nbrcmd == 1)
+				return ;
 		}
 	}
 	else
 	{
-		// printf("|raqm d file lmaleun = %d|\n", cmdp->files[0]);
-		// fflush(stdout);
-		
 		hd_content = joinheredoc(av);
-		
-		printf("|hada hd_cntnt|%s|\n", hd_content);
-		fflush(stdout);
-
-		txt = ft_calloc(strlen(hd_content), sizeof(char));
 		pipe(pp);
-		write(pp[1], hd_content, strlen(hd_content));
+		if (hd_content)
+		{
+			write(pp[1], hd_content, ft_strlen(hd_content));
+			free(hd_content);
+		}
 		close(pp[1]);
 		cmdp->files[0] = pp[0];
-		close(pp[0]);
-
-		
-		printf("|raqm d file lmaleun 2 = %d|\n", cmdp->files[0]);
-		fflush(stdout);
-
-		// close(pp[0]);
-		// exit(1);
 	}
 }
 
 t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 {
-	if (!strcmp("here_doc", av[1])) //khzsni nbadal L ft_strcmp
+	if (!strcmp("here_doc", av[1])) 
 	{
 		cmdp = malloc((ac - 4) * sizeof(t_cp) );
 		cmdp->nbrcmd = ac - 4;
-
 		cmdp->her_exist = 1;
 		checkfile(cmdp, av);
-		// splitav(av, cmdp);
 		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
 	}
 	else
@@ -245,9 +225,6 @@ t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 		cmdp->nbrcmd = ac - 3;
 		cmdp->her_exist = 0;
 		checkfile(cmdp, av);
-		// printf("hada raqm li khda infile : %d", cmdp->files[0]);
-		// fflush(stdout);
-		// splitav(av, cmdp);
 		if(cmdp->nbrcmd > 1)
 			cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	}
@@ -258,12 +235,12 @@ t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	// char	**splitedp;
-	// int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	int i = 0;
-	int j = 0;
-	if (ac < 4)
+
+	cmdp = NULL;
+	// int i = 0;
+	// int j = 0;
+	if (ac < 5)
 		return 0;
 	if(!*env)
 		return 0;
@@ -273,7 +250,6 @@ int	main(int ac, char **av, char **env)
 		return 0;
 	joinpath(cmdp, cmdp->nbrcmd);
 	// cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-
 	tofork(cmdp, env, 0, 0);
 	// while(i < cmdp->nbrcmd)
 	// {

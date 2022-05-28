@@ -1,0 +1,5 @@
+./pipex "here_doc" lim cat "wc -l" outhere 
+./pipex "here_doc" lim cat cat outhere fasdf
+
+dsafadsfs
+dfas
