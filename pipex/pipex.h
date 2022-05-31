@@ -29,6 +29,7 @@ typedef struct s_cp
 
 typedef struct s_pipe
 {
+	int			fd[2];
 	struct s_pipe	*next;
 }					t_pipe;
 // char	*ft_strjoin(char const *s1, char const *s2);

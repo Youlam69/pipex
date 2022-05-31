@@ -67,6 +67,7 @@ void	joinpath(t_cp *cmd, int nbrcmd)
 			cmd[j].cmdp = strdup(cmd[j].cmd[0]);
 	}
 }
+
 void	tofork (t_cp *cmd, char **env, int i, int fd2)
 {
 	pid_t pid;
@@ -84,12 +85,12 @@ void	tofork (t_cp *cmd, char **env, int i, int fd2)
 		if (pid == -1)
 			return ;
 	}
-	else
+	else //khas t7yd
 		return ;
 	if (pid == 0)
 	{
 		close(fdp[0]);
-		if(i + 1 < cmd->nbrcmd )
+		if (i + 1 < cmd->nbrcmd )
 		{
 			if (i == 0)
 			{
@@ -191,7 +192,7 @@ void	checkfile(t_cp *cmdp, char **av)
 		{
 			// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
 			ft_printf("%s: %s\n", strerror(errno), av[1]);
-			if (cmdp->nbrcmd == 1)
+			if (cmdp->nbrcmd == 1) /// khqs t9qwdi mn hnq
 				return ;
 		}
 	}
@@ -211,7 +212,7 @@ void	checkfile(t_cp *cmdp, char **av)
 
 t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
 {
-	if (!strcmp("here_doc", av[1])) 
+	if (!strcmp("here_doc", av[1])) // ft_strcmp khqs tkun qzbi
 	{
 		cmdp = malloc((ac - 4) * sizeof(t_cp) );
 		cmdp->nbrcmd = ac - 4;
@@ -247,7 +248,8 @@ int	main(int ac, char **av, char **env)
 
 	cmdp = checkheredoc(cmdp, ac, av, env);
 	if(cmdp->nbrcmd < 2)
-		return 0;
+		return 0;	// free azbi dakchy li 3amr
+
 	joinpath(cmdp, cmdp->nbrcmd);
 	// cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	tofork(cmdp, env, 0, 0);
