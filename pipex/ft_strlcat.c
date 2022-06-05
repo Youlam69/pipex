@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex.h"
+
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {

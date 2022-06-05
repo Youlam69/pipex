@@ -16,7 +16,6 @@ ft_printf.c \
 ft_substr.c \
 ft_strjoin.c \
 testmix2.c
-# /* ft_strjoin.c \ */
 
 
 OBJS = $(FCTS:.c=.o)
@@ -26,8 +25,8 @@ NAME = libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(AR) $@ $^ ./GNxtL/get_next_line.h libft.h
-	@$(CC) $(CFLAGS) libft.a -o pipex
+	@$(AR) $@ $^ ./GNxtL/get_next_line.h pipex.h
+	@$(CC) $(CFLAGS) libft.a -o pipex -g
 
 clean:
 	@rm -f $(OBJS)

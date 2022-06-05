@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include <unistd.h>
+#include "pipex.h"
 
 void	ft_putchar_fd(char c, int *ret)
 {

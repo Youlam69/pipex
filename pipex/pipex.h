@@ -1,3 +1,4 @@
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -6,7 +7,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
-# include "libft.h"
+# include <stdarg.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
@@ -27,24 +28,31 @@ typedef struct s_cp
 	int				her_exist;
 }					t_cp;
 
-typedef struct s_pipe
-{
-	int			fd[2];
-	struct s_pipe	*next;
-}					t_pipe;
-// char	*ft_strjoin(char const *s1, char const *s2);
-// char	*ft_strtrim(char const *s1, char const *set);
-// char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
-// char	*ft_substr(char const *s, unsigned int start, size_t len);
-// char	**ft_split(char const *s, char c);
-// t_list	*ft_lstnew(void *content);
-// void	ft_lstadd_front(t_list **lst, t_list *new);
-// int		ft_lstsize(t_list *lst);
-// t_list	*ft_lstlast(t_list *lst);
-// void	ft_lstadd_back(t_list **lst, t_list *new);
-// void	ft_lstdelone(t_list *lst, void (*del)(void*));
-// void	ft_lstiter(t_list *lst, void (*f)(void *));
-// t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-// void	ft_lstclear(t_list **lst, void (*del)(void*));
+int		ft_printf(const char *str, ...);
+
+size_t	ft_strlen(const char *s);
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+
+char	*ft_strchr(const char *s, int c);
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+
+
+
+char	*ft_calloc(size_t count, size_t size);
+
+char	*ft_strdup(const char *s1);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strtrim(char const *s1, char const *set);
+char	**ft_split(char const *s, char c);
+void	tofork (t_cp *cmd, char **env, int i, int fd2);
+
+
+// char	**splitpath(char **env);
+// void	splitav(char **av, t_cp *cmdp);
+
+
 
 #endif
