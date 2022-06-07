@@ -1,5 +1,6 @@
 #include "pipex.h"
 
+
 char	**splitpath(char **env)
 {
 	char *path;
@@ -32,7 +33,6 @@ void	splitav(char **av, t_cp *cmdp)
 
 int		accs(char *path)
 {
-	int opn;
 	if (access(path, F_OK))
 		return 1;
 	if (open(path, O_DIRECTORY) < 0)
@@ -45,20 +45,20 @@ int		accs(char *path)
 	return (3);
 }
 
-void	joinpath(t_cp *cmd, int nbrcmd)
+void	joinpath(t_cp *cmd)
 {
 	int		i;
 	int		j;
 	char	*tmp;
 
 	j = -1;
-	while (++j < nbrcmd && cmd[j].cmd[0])
+	while (++j < cmd->nbrcmd && cmd[j].cmd[0])
 	{
 		i = -1;
 		while (cmd->splitedp[++i])
 		{
 			tmp = ft_strjoin(cmd->splitedp[i], "/");
-			cmd[j].cmdp = ft_strjoin(tmp, (const char *)(cmd[j].cmd[0]));
+			cmd[j].cmdp = ft_strjoin(tmp, (cmd[j].cmd[0]));
 			free(tmp);
 			if (accs(cmd[j].cmdp) == 0)
 				break;
@@ -69,168 +69,219 @@ void	joinpath(t_cp *cmd, int nbrcmd)
 	}
 }
 
-void	tofork (t_cp *cmd, char **env, int i, int fd2) // int **tab
+int	dup_close(int in, int out)
+{
+	int dup_;
+
+	dup_ = dup2(in, 0);
+	if (dup_ < 0)
+		return (dup_);
+	dup_ = dup2(out, 1);
+	if (dup_ < 0)
+		return (dup_);
+	return (0);
+}
+void	child(t_cp *cmd, int *fdp, int fd2, int i)
+{
+	close(fdp[0]);
+	if (i + 1 < cmd->nbrcmd )
+	{
+		if (i == 0)
+		{
+			if(cmd->files[0] < 0)
+			exit(1);
+			dup_close(cmd->files[0], fdp[1]);
+		}
+		else
+			dup_close(fd2, fdp[1]);
+	}
+	else
+		dup_close(fd2, cmd->files[1]);
+}
+
+void	parent(t_cp *cmd, int *fdp, int *r, char **env)
+{
+	int	i;
+	
+	i = *r;
+	if(accs(cmd[i].cmdp))
+		ft_printf("command not found: %s\n", cmd[i].cmd[0]);
+	i = ++*r;
+	if(cmd->nbrcmd > i)
+	{
+		close(fdp[1]);
+		tofork(cmd, env, i, fdp[0]);
+	}
+}
+
+void	tofork (t_cp *cmd, char **env, int i, int fd2)
 {
 	pid_t pid;
-	int fdpp[2];
+	int fdp[2];
 
-	pid = -2;
-	if(pipe(fdpp) < 0)
+	if(pipe(fdp) < 0)
 	{
 		perror("Error");
 		return ;
 	}
-	if (cmd->nbrcmd > i) //nbrcmnd
-	{
-		pid = fork();
-		if (pid == -1)
-			return ;
-	}
-	else
+	pid = fork();
+	if (pid == -1)
 		return ;
 	if (pid == 0)
 	{
-		close(fdpp[0]);
-		if(i + 1 < cmd->nbrcmd ) // normalement khas maydkkhalch la kan ghir cmnd 1
-		{
-			if (i == 0)
-			{
-				// if (cmd->files[0] < 0)
-				// {
-	 // printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh KKKKKKKKK%d\n", cmd->files[0]);
-				// 	exit(1);
-				// }
-	printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
-					printf("\nhada dup %i\n",dup2(cmd->files[0], 0));
-			fflush(stdout);
-				dup2(fdpp[1], 1);
-				close(fdpp[1]);
- 
-			}
-			else if (i > 0)
-			{
-	printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ELSEIF f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
-
-				dup2(fdpp[1], 1);
-				dup2(fd2,0);
-				close(fd2);
-			}
-		}
-		else if (i + 1 == cmd->nbrcmd) // normalement khas maydkkhalch la kan ghir cmnd 1 oui effectivement a3chiry
-		{
-	printf("HHHHHH f0->%d, f1->%d, i->%d, cmdp[i]-> |%s| \n", cmd->files[0], cmd->files[1], i, cmd[i].cmdp );
-
-			dup2(fd2, 0);
-			close(fd2);
-			dup2(cmd[0].files[1], 1);
-			close(cmd[0].files[1]);
-		}
+		child(cmd, fdp, fd2, i);
 		execve(cmd[i].cmdp, cmd[i].cmd, env);
-		// printf("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh %d\n", cmd->files[0]);
 		exit(1);
 	}
 	else
 	{
-		// printf("check %d \n", cmd->her_exist);
-		if((accs(cmd[i].cmdp)))
-			ft_printf("command not found: %s\n", cmd[i].cmd[0]);
-		i++;
-		printf("hadi i = %d w nbr de cmnd = %d\n", i, cmd->nbrcmd);
-		if(cmd->nbrcmd > i)
-		{
-
-		// printf("hadi i = %d w nbr de cmnd = %d\n dkhal1 \n", i, cmd->nbrcmd);
-
-			/**to modified cuz i will read from pipe not in put**/
-			if (pid == -2)
-			{
-				close(fdpp[1]);
-				// fdp.fd2 = 0;
-			}
-			/*****************************************************/
-			else if(pid == -1)
-				return ;
-			if (cmd->files[0] < 0 )
-			// 	exit(1);
-			close(fdpp[1]);
-			tofork(cmd, env, i, fdpp[0]);
-			// printf("anihna\n");
-		}
+		if(pid == -1)
+			return ;
+		parent(cmd, fdp, &i, env);
 		wait(NULL);
 	}
 }
-// pipex here_doc LIMITER cmd cmd1 file
-t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
+
+char	*joinheredoc(char **av)
 {
-	if (!strcmp("here_doc", av[1]))
+	char	*hd_content;
+	char	*limiter;
+	char	*tmp;
+
+	hd_content = NULL;
+	while (1)
 	{
-		cmdp = malloc((ac - 4) * sizeof(t_cp) );
-		cmdp->nbrcmd = ac - 4;
-		cmdp->her_exist = 1;
-		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
-		splitav(av, cmdp);
+		ft_printf("> ");
+		limiter = get_next_line(0);
+		tmp = ft_strjoin(av[2], "\n");
+		if(strcmp(tmp, limiter) != 0)
+		{
+			free(tmp);
+			tmp = hd_content;
+			hd_content = ft_strjoin(hd_content, limiter);
+			if (tmp)
+				free(tmp);
+		}
+		else
+			break;
+		if (limiter)
+			free(limiter);
+	}
+	free(limiter);
+	return (hd_content);
+}
+
+void	checkfile(t_cp *cmdp, char **av)
+{
+	int		pp[2];
+	char	*hd_content;
+
+	if (cmdp->her_exist == 0)
+	{
+		cmdp->files[0] = open(av[1], O_RDONLY, 0644);
+		if (cmdp->files[0] < 0)
+			ft_printf("%s: %s\n", strerror(errno), av[1]);
 	}
 	else
 	{
-		cmdp = malloc((ac - 3) * sizeof(t_cp) );
-		cmdp->nbrcmd = ac - 3;
-		cmdp->her_exist = 0;
-		cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-		splitav(av, cmdp);
+		hd_content = joinheredoc(av);
+		pipe(pp);
+		if (hd_content)
+		{
+			write(pp[1], hd_content, ft_strlen(hd_content));
+			free(hd_content);
+		}
+		close(pp[1]);
+		cmdp->files[0] = pp[0];
 	}
-	cmdp->splitedp = splitpath(env);
+}
 
+t_cp	*allocheredoc(t_cp *cmdp, char **av, int ac)
+{
+	cmdp = malloc((ac - 4) * sizeof(t_cp) );
+	cmdp->nbrcmd = ac - 4;
+	cmdp->her_exist = 1;
+	if(cmdp->nbrcmd > 1)
+	{
+		checkfile(cmdp, av);
+		cmdp->files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_APPEND, 0644);
+	}
+	return (cmdp);
+}
+
+t_cp	*alloctoelse(t_cp *cmdp, char **av, int ac)
+{
+	cmdp = malloc((ac - 3) * sizeof(t_cp) );
+	cmdp->nbrcmd = ac - 3;
+	cmdp->her_exist = 0;
+	if(cmdp->nbrcmd > 1)
+	{
+		checkfile(cmdp, av);
+		cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	}
+	return (cmdp);
+}
+
+t_cp	*checkheredoc(t_cp *cmdp, int ac, char **av, char **env)
+{
+	if (!ft_strcmp("here_doc", av[1])) // ft_strcmp khqs tkun qzbi
+		cmdp = allocheredoc(cmdp, av, ac);
+	else
+		cmdp = alloctoelse(cmdp, av, ac);
+	if(cmdp->nbrcmd > 1)
+	{
+		splitav(av, cmdp);
+		cmdp->splitedp = splitpath(env);
+	}
 	return(cmdp);
+}
+
+void	freeing(t_cp *cmdp)
+{
+	int i = 0;
+	int j = 0;
+	while (cmdp->splitedp[i])
+	{
+		free(cmdp->splitedp[i]);
+		i++;
+	}
+	free(cmdp->splitedp);
+		i = 0;
+	while(i < cmdp->nbrcmd)
+	{
+		j = 0;
+		while(cmdp[i].cmd[j])
+		{
+			free(cmdp[i].cmd[j]);
+			j++;
+		}
+		free(cmdp[i].cmd);
+		free(cmdp[i].cmdp);
+		i++;
+	}
+	free(cmdp);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	// char	**splitedp;
-	// int		nbrcmd = ac - 3;
 	t_cp	*cmdp;
-	int i = 0;
-	int j = 0;
-	if (ac < 4)
+
+	cmdp = NULL;
+	if (ac < 5)
 		return 0;
 	if(!*env)
 		return 0;
-	cmdp = checkheredoc(cmdp, ac, av, env);	//malloc(nbrcmd * sizeof(t_cp) );
 
-	// splitav(av, nbrcmd, cmdp);
-	// splitedp = splitpath(env);
-
-	joinpath(cmdp, cmdp->nbrcmd);
-	cmdp[0].files[0] = open(av[1], O_RDONLY, 0644);
-		// cmdp[0].files[0] = open("/dev/null", O_RDONLY, 0644);
-	if (cmdp[0].files[0] < 0)
+	cmdp = checkheredoc(cmdp, ac, av, env);
+	if(cmdp->nbrcmd < 2)
 	{
-		printf("%s %s WWWW %d\n", strerror(errno), av[1], cmdp[0].files[0]);
-		fflush(stdout);
+		if(cmdp)
+			free(cmdp);
+		return 0;
 	}
-	// cmdp[0].files[1] = open(av[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-
-
-	tofork(cmdp, env, 0, 555423);
-	// while(i < cmdp->nbrcmd)
-	// {
-	// 	j = 0;
-	// 	while(cmdp[i].cmd[j])
-	// 	{
-	// 		free(cmdp[i].cmd[j]);
-	// 		j++;
-	// 	}
-	// 	free(cmdp[i].cmd);
-	// 	free(cmdp[i].cmdp);
-	// 	i++;
-	// }
-	// free(cmdp);
-	// i = 0;
-	// while (cmdp->splitedp[i])
-	// {
-	// 	free(cmdp->splitedp[i]);
-	// 	i++;
-	// }
-	// free(cmdp->splitedp);
+	joinpath(cmdp);
+	tofork(cmdp, env, 0, 0);
+	freeing(cmdp);
 	return 0;
 }
 

@@ -2,8 +2,8 @@
 CFLAGS = -Wall -Wextra -Werror
 AR = ar rc
 CC = gcc
-FCTS = ./GNxtL/get_next_line.c \
-./GNxtL/get_next_line_utils.c \
+FCTS = get_next_line.c \
+get_next_line_utils.c \
 ft_calloc.c \
 ft_split.c \
 ft_strchr.c \
@@ -15,18 +15,18 @@ ft_strtrim.c \
 ft_printf.c \
 ft_substr.c \
 ft_strjoin.c \
-testmix2.c
+pipex.c
 
 
 OBJS = $(FCTS:.c=.o)
 
-NAME = libft.a
+NAME = pipex.a
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(AR) $@ $^ ./GNxtL/get_next_line.h pipex.h
-	@$(CC) $(CFLAGS) libft.a -o pipex -g
+	@$(AR) $@ $^ pipex.h
+	@$(CC) $(CFLAGS) pipex.a -o pipex -g
 
 clean:
 	@rm -f $(OBJS)
