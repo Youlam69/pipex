@@ -1,38 +1,53 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/08 11:24:45 by ylamraou          #+#    #+#              #
+#    Updated: 2022/06/08 11:33:03 by ylamraou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CFLAGS = -Wall -Wextra -Werror
-AR = ar rc
-CC = gcc
-FCTS = get_next_line.c \
+
+CFLAG = -Wall -Wextra -Werror
+AR = ar rcs
+CC = cc
+# #########SRCS#############
+SRC = libft.c \
+lib_ft.c \
 get_next_line_utils.c \
-ft_calloc.c \
+get_next_line.c \
+freeing.c \
 ft_split.c \
-ft_strchr.c \
-ft_strdup.c \
-ft_strlcat.c \
-ft_strlen.c \
-ft_strnstr.c \
-ft_strtrim.c \
 ft_printf.c \
-ft_substr.c \
-ft_strjoin.c \
+split.c \
+cheker.c \
 pipex.c
 
-
-OBJS = $(FCTS:.c=.o)
-
+OBJS = $(SRC:.c=.o)
+# #########library#############
 NAME = pipex.a
+# ###########EXEC###############
+EXEC = pipex
 
-all: $(NAME)
+all: $(EXEC)
+
+$(EXEC) : $(NAME) 
+	@$(CC) $(CFLAG) $(NAME) -g -o pipex 
 
 $(NAME): $(OBJS)
-	@$(AR) $@ $^ pipex.h
-	@$(CC) $(CFLAGS) pipex.a -o pipex -g
+	@$(AR) $(NAME) $(OBJS) 
+
+%.o : %.c
+	$(CC) $(CFLAG) -c $< 
 
 clean:
 	@rm -f $(OBJS)
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) 
 
 re: fclean all
 

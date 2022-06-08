@@ -6,12 +6,11 @@
 /*   By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:29:51 by ylamraou          #+#    #+#             */
-/*   Updated: 2021/12/18 19:10:35 by ylamraou         ###   ########.fr       */
+/*   Updated: 2022/06/08 09:56:54 by ylamraou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 static int	size_str(char const *s, char c)
 {

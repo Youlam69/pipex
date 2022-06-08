@@ -1,19 +1,19 @@
-#include <stdarg.h>
-
+#include "pipex.h"
 
 char	**splitpath(char **env)
 {
-	char *path;
-	char **splited;
-	int i = 0;
+	char	*path;
+	char	**splited;
+	int		i;
 
+	i = 0;
 	while (env[i])
 	{
 		path = ft_strnstr(env[i], "PATH=", 5);
 		if (path)
 		{
 			path = ft_strtrim(path, "PATH=");
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -24,17 +24,17 @@ char	**splitpath(char **env)
 
 void	splitav(char **av, t_cp *cmdp)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(++i < cmdp->nbrcmd)
+	while (++i < cmdp->nbrcmd)
 		cmdp[i].cmd = ft_split(av[i + 2 + cmdp->her_exist], ' ');
 }
 
-int		accs(char *path)
+int	accs(char *path)
 {
 	if (access(path, F_OK))
-		return 1;
+		return (1);
 	if (open(path, O_DIRECTORY) < 0)
 	{
 		if (!(access(path, X_OK)))
@@ -61,7 +61,7 @@ void	joinpath(t_cp *cmd)
 			cmd[j].cmdp = ft_strjoin(tmp, (cmd[j].cmd[0]));
 			free(tmp);
 			if (accs(cmd[j].cmdp) == 0)
-				break;
+				break ;
 			free(cmd[j].cmdp);
 		}
 		if (!cmd->splitedp[i])

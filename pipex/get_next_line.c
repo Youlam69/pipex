@@ -6,7 +6,7 @@
 /*   By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/10 14:54:13 by ylamraou          #+#    #+#             */
-/*   Updated: 2022/05/26 04:35:15 by ylamraou         ###   ########.fr       */
+/*   Updated: 2022/06/08 09:56:34 by ylamraou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*to_alloc(int fd, char *str, int *r1)
 	r = 1;
 	while (searchnewline(str) == -1 && r)
 	{
-		tmp = ft_callocgt(1 + 1, sizeof(char));
+		tmp = ft_calloc(1 + 1, sizeof(char));
 		if (!tmp)
 			return (NULL);
 		r = read(fd, tmp, 1);
@@ -71,17 +71,16 @@ char	*get_next_line(int fd)
 	toswitch = str[fd];
 	stock = searchnewline(str[fd]);
 	if (r1 <= 0)
-		stock = ft_strlengt(str[fd]);
+		stock = ft_strlen(str[fd]);
 	tmp = ft_substrgt(str[fd], 0, stock + 1);
 	if (!tmp)
 		return (NULL);
-	str[fd] = ft_substrgt(str[fd], stock + 1, ft_strlengt(str[fd]));
+	str[fd] = ft_substrgt(str[fd], stock + 1, ft_strlen(str[fd]));
 	free(toswitch);
 	if (r1 <= 0)
 	{
 		free(str[fd]);
 		str[fd] = NULL;
 	}
-
 	return (tmp);
 }
