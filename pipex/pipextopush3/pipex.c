@@ -6,7 +6,7 @@
 /*   By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 11:45:10 by ylamraou          #+#    #+#             */
-/*   Updated: 2022/06/08 11:45:11 by ylamraou         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:00:32 by ylamraou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	parent(t_cp *cmd, int *fdp, int *r, char **env)
 
 	i = *r;
 	if ((accs(cmd[i].cmdp)))
-		if (cmd->files[0] > 0 && i <= 0)
+		if (cmd->files[0] >= 0 || i != 0)
 			ft_printf("command not found: %s\n", cmd[i].cmd[0]);
 	i = ++*r;
 	if (cmd->nbrcmd > i)
@@ -83,7 +83,6 @@ void	tofork(t_cp *cmd, char **env, int i, int fd2)
 		if (pid == -1)
 			return ;
 		parent(cmd, fdp, &i, env);
-		wait(NULL);
 	}
 }
 
