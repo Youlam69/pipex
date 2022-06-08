@@ -6,7 +6,7 @@
 #    By: ylamraou <ylamraou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/08 11:24:45 by ylamraou          #+#    #+#              #
-#    Updated: 2022/06/08 11:33:03 by ylamraou         ###   ########.fr        #
+#    Updated: 2022/06/08 11:39:36 by ylamraou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ $(NAME): $(OBJS)
 	@$(AR) $(NAME) $(OBJS) 
 
 %.o : %.c
-	$(CC) $(CFLAG) -c $< 
+	$(CC) $(CFLAG) -c $<
 
 clean:
 	@rm -f $(OBJS)
